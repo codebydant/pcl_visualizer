@@ -12,7 +12,7 @@ This program display a PCL viewer for input data with next extension:
 
 ## Example
 
-<img src="./example/example.jpg" align="center" height="500" width="640"><br>
+<img src="./example/example.png" align="center" height="500" width="640"><br>
 
 ## Compile
 * Create a "build" folder
