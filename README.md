@@ -19,13 +19,13 @@ This program display a PCL viewer for input data with next extension:
 
 in the main folder:
 
-	     - src 
-		   - build
+	   - src 
+	   - build
 Then:
 
-	     - cd build  
-		   - cmake ../src/
-       - make
+	   - cd build  
+	   - cmake ../src/
+           - make
        
         	 
 ### Test
