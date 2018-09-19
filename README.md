@@ -23,8 +23,8 @@ in the main folder:
 	   - build
 Then:
 
-	   - cd build  
-	   - cmake ../src/
+	- cd build  
+	- cmake ../src/
   	- make
        
         	 
