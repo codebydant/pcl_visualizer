@@ -31,9 +31,9 @@ Then:
 ### Test
 
 	./pcl-visualizer <pcd file> 
-  ./pcl-visualizer <ply file> 
-  ./pcl-visualizer <txt file> 
-  ./pcl-visualizer <xyz file> 
+  	./pcl-visualizer <ply file> 
+  	./pcl-visualizer <txt file> 
+  	./pcl-visualizer <xyz file> 
   
 
 
