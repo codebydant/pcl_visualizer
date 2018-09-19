@@ -25,7 +25,7 @@ Then:
 
 	   - cd build  
 	   - cmake ../src/
-           - make
+         - make
        
         	 
 ### Test
