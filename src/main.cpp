@@ -100,6 +100,13 @@ int main(int argc, char **argv){
               }
           }
        }
+
+      pcl::console::print_info("\nFound ply file.\n");
+      pcl::console::print_info ("[done, ");
+      pcl::console::print_value ("%g", tt.toc ());
+      pcl::console::print_info (" ms : ");
+      pcl::console::print_value ("%d", cloud->size ());
+      pcl::console::print_info (" points]\n");
     }else if(file_is_txt or file_is_xyz){
       std::ifstream file(argv[filenames[0]]);
       if(!file.is_open()){
