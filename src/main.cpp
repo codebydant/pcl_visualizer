@@ -37,6 +37,7 @@ int main(int argc, char **argv){
   bool file_is_txt = false;
   bool file_is_xyz = false;
 
+
   if(argc < 2 or argc > 2){
       printUsage (argv[0]);
       return -1;
@@ -114,13 +115,25 @@ int main(int argc, char **argv){
           return -1;
       }
       double x_,y_,z_;
-      while(file >> x_ >> y_ >> z_){
+      uint8_t r_;
+      uint8_t g_;
+      uint8_t b_; 
+
+      while(file >> x_ >> y_ >> z_ >> r_ >> g_ >> b_){
           pcl::PointXYZRGB pt;
           pt.x = x_;
           pt.y = y_;
-          pt.z= z_;
-          cloud->points.push_back(pt);
+          pt.z= z_;   
+          
+
+         // RGB color, needs to be represented as an integer
+         uint8_t rgb = (static_cast<uint8_t>(r_) << 16 | static_cast<uint8_t>(g_) << 8 | static_cast<uint8_t>(b_));
+         pt.rgb = *reinterpret_cast<float*>(&rgb);
+        
+         cloud->points.push_back(pt);
       }
+      
+      std::cout << "pt:" << cloud->points.at(0) << std::endl;
 
       pcl::console::print_info("\nFound txt file.\n");
       pcl::console::print_info ("[done, ");
