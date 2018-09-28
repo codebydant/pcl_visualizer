@@ -87,15 +87,15 @@ int main(int argc, char **argv){
       pcl::console::print_info (" points]\n");
     }else if(file_is_ply){
       pcl::io::loadPLYFile(argv[filenames[0]],*cloud);
-      if(cloud->points.size()<=0){
+      if(cloud->points.size()<=0 or cloud->points.at(0).x <=0 and cloud->points.at(0).y <=0 and cloud->points.at(0).z <=0){
           pcl::console::print_warn("\nloadPLYFile could not read the cloud, attempting to loadPolygonFile...\n");
           pcl::io::loadPolygonFile(argv[filenames[0]], cl);
           pcl::fromPCLPointCloud2(cl.cloud, *cloud);
-          if(cloud->points.size()<=0){
+          if(cloud->points.size()<=0 or cloud->points.at(0).x <=0 and cloud->points.at(0).y <=0 and cloud->points.at(0).z <=0){
               pcl::console::print_warn("\nloadPolygonFile could not read the cloud, attempting to PLYReader...\n");
               pcl::PLYReader plyRead;
               plyRead.read(argv[filenames[0]],*cloud);
-              if(cloud->points.size()<=0){
+              if(cloud->points.size()<=0 or cloud->points.at(0).x <=0 and cloud->points.at(0).y <=0 and cloud->points.at(0).z <=0){
                   pcl::console::print_error("\nError. ply file is not compatible.\n");
                   return -1;
               }
@@ -106,7 +106,7 @@ int main(int argc, char **argv){
       pcl::console::print_info ("[done, ");
       pcl::console::print_value ("%g", tt.toc ());
       pcl::console::print_info (" ms : ");
-      pcl::console::print_value ("%d", cloud->size ());
+      pcl::console::print_value ("%d", cloud->points.size ());
       pcl::console::print_info (" points]\n");
     }else if(file_is_txt or file_is_xyz){
       std::ifstream file(argv[filenames[0]]);
@@ -114,32 +114,28 @@ int main(int argc, char **argv){
           std::cout << "Error: Could not find "<< argv[filenames[0]] << std::endl;
           return -1;
       }
+      
+      std::cout << "file opened." << std::endl;
       double x_,y_,z_;
-      uint8_t r_;
-      uint8_t g_;
-      uint8_t b_; 
+      uint8_t r_,g_,b_; 
 
-      while(file >> x_ >> y_ >> z_ >> r_ >> g_ >> b_){
+      while(file >> x_ >> y_ >> z_ /*>> r_ >> g_ >> b_*/){
           pcl::PointXYZRGB pt;
           pt.x = x_;
           pt.y = y_;
-          pt.z= z_;   
-          
-
-         // RGB color, needs to be represented as an integer
-         uint8_t rgb = (static_cast<uint8_t>(r_) << 16 | static_cast<uint8_t>(g_) << 8 | static_cast<uint8_t>(b_));
-         pt.rgb = *reinterpret_cast<float*>(&rgb);
-        
-         cloud->points.push_back(pt);
-      }
+          pt.z= z_;                  
+              
+          cloud->points.push_back(pt);
+          std::cout << "pointXYZRGB:" <<  pt << std::endl;
+      }   
       
-      std::cout << "pt:" << cloud->points.at(0) << std::endl;
+     
 
       pcl::console::print_info("\nFound txt file.\n");
       pcl::console::print_info ("[done, ");
       pcl::console::print_value ("%g", tt.toc ());
       pcl::console::print_info (" ms : ");
-      pcl::console::print_value ("%d", cloud->size ());
+      pcl::console::print_value ("%d", cloud->points.size ());
       pcl::console::print_info (" points]\n");
     }
 
@@ -170,6 +166,8 @@ int main(int argc, char **argv){
   }else{
       viewer->addPointCloud(cloud,"POINTCLOUD");
   }
+  
+  // viewer->addPointCloud(cloud,"POINTCLOUD");
 
   viewer->initCameraParameters();
   viewer->resetCamera();
