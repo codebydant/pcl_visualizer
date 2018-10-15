@@ -1,21 +1,16 @@
 /*********************************
            HEADERS
 **********************************/
-#include <pcl/common/common_headers.h>
-#include <pcl/features/normal_3d.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/io/ply_io.h>
-#include <pcl/io/vtk_io.h>
-#include <pcl/io/io.h>
 #include <pcl/io/vtk_lib_io.h>
-#include <pcl/io/file_io.h>
-#include <pcl/io/ply/ply_parser.h>
-#include <pcl/io/ply/ply.h>
+
 #include <pcl/visualization/pcl_visualizer.h>
+
 #include <pcl/console/print.h>
 #include <pcl/console/parse.h>
 #include <pcl/console/time.h>
-#include <pcl/range_image/range_image.h>
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -25,11 +20,10 @@ void printUsage (const char* progName){
                "[q] to exit" << std::endl;
 }
 
-using namespace std;
 
 int main(int argc, char **argv){
 
-  pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZRGB>());
+  pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGB>());
   pcl::PolygonMesh cl;
   std::vector<int> filenames;
   bool file_is_pcd = false;
@@ -126,11 +120,9 @@ int main(int argc, char **argv){
           pt.z= z_;                  
               
           cloud->points.push_back(pt);
-          std::cout << "pointXYZRGB:" <<  pt << std::endl;
-      }   
-      
+          //std::cout << "pointXYZRGB:" <<  pt << std::endl;
+      }      
      
-
       pcl::console::print_info("\nFound txt file.\n");
       pcl::console::print_info ("[done, ");
       pcl::console::print_value ("%g", tt.toc ());
@@ -168,7 +160,6 @@ int main(int argc, char **argv){
   }
   
   // viewer->addPointCloud(cloud,"POINTCLOUD");
-
   viewer->initCameraParameters();
   viewer->resetCamera();
 
@@ -177,6 +168,7 @@ int main(int argc, char **argv){
   while(!viewer->wasStopped()){
       viewer->spin();
   }
+
 
   return 0;
 }
