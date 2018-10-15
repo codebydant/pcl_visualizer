@@ -20,13 +20,14 @@ This program display a PCL viewer for input data with next extension:
 
 in the main folder:
 
-	- cd build  
+	- cd /build  
 	- cmake ../
   	- make
        
         	 
 ### Test
 
+	cd /build/bin
 	./pcl-visualizer <pcd file> 
   	./pcl-visualizer <ply file> 
   	./pcl-visualizer <txt file> 
