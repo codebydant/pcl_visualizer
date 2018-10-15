@@ -21,7 +21,7 @@ This program display a PCL viewer for input data with next extension:
 in the main folder:
 
 	- cd /build  
-	- cmake ../
+	- cmake ../src/
   	- make
        
         	 
