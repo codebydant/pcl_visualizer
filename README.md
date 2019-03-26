@@ -12,7 +12,7 @@ This program display a PCL viewer for input data with the next extension:
 
 ## Example
 
-<img src="./example/example.png" align="center" height="500" width="640"><br>
+<img src="./example/example.png" align="center" height="500" width="700"><br>
 
 ## Compilation
 * Set "YOUR OWN" PCL Build DIR in CMakeList.txt e.g: **/opt/pcl-1.8.1/build** and save it.
