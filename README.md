@@ -3,7 +3,7 @@ Visualizer for a 3D point cloud using PCL Library 1.8.1
 
 ----------------------
 
-This program display a PCL viewer for input data with next extension:
+This program display a PCL viewer for input data with the next extension:
 
 * PCD 
 * PLY 
