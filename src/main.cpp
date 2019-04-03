@@ -16,7 +16,8 @@
 #include <string>
 
 void printUsage (const char* progName){
-  std::cout << "\nUsage: " << progName << " <file.pcd> or <file.ply>"  << std::endl <<
+  std::cout << "\nUse: " << progName << " <file>"  << std::endl <<
+               "support: .pcd .ply .txt .xyz" << std::endl <<
                "[q] to exit" << std::endl;
 }
 
@@ -102,7 +103,8 @@ int main(int argc, char **argv){
       pcl::console::print_info (" ms : ");
       pcl::console::print_value ("%d", cloud->points.size ());
       pcl::console::print_info (" points]\n");
-    }else if(file_is_txt or file_is_xyz){
+      
+    }else if(file_is_txt){
       std::ifstream file(argv[filenames[0]]);
       if(!file.is_open()){
           std::cout << "Error: Could not find "<< argv[filenames[0]] << std::endl;
@@ -111,13 +113,21 @@ int main(int argc, char **argv){
       
       std::cout << "file opened." << std::endl;
       double x_,y_,z_;
-      uint8_t r_,g_,b_; 
+      unsigned int r, g, b; 
 
-      while(file >> x_ >> y_ >> z_ /*>> r_ >> g_ >> b_*/){
+      while(file >> x_ >> y_ >> z_ >> r >> g >> b){
           pcl::PointXYZRGB pt;
           pt.x = x_;
           pt.y = y_;
-          pt.z= z_;                  
+          pt.z= z_;            
+          
+          uint8_t r_, g_, b_; 
+          r_ = uint8_t(r); 
+          g_ = uint8_t(g); 
+          b_ = uint8_t(b); 
+
+          uint32_t rgb_ = ((uint32_t)r_ << 16 | (uint32_t)g_ << 8 | (uint32_t)b_); 
+          pt.rgb = *reinterpret_cast<float*>(&rgb_);               
               
           cloud->points.push_back(pt);
           //std::cout << "pointXYZRGB:" <<  pt << std::endl;
@@ -129,7 +139,36 @@ int main(int argc, char **argv){
       pcl::console::print_info (" ms : ");
       pcl::console::print_value ("%d", cloud->points.size ());
       pcl::console::print_info (" points]\n");
-    }
+      
+  }else if(file_is_xyz){
+  
+      std::ifstream file(argv[filenames[0]]);
+      if(!file.is_open()){
+          std::cout << "Error: Could not find "<< argv[filenames[0]] << std::endl;
+          return -1;
+      }
+      
+      std::cout << "file opened." << std::endl;
+      double x_,y_,z_;
+
+      while(file >> x_ >> y_ >> z_){
+          
+          pcl::PointXYZRGB pt;
+          pt.x = x_;
+          pt.y = y_;
+          pt.z= z_;            
+          
+          cloud->points.push_back(pt);
+          //std::cout << "pointXYZRGB:" <<  pt << std::endl;
+      }      
+     
+      pcl::console::print_info("\nFound xyz file.\n");
+      pcl::console::print_info ("[done, ");
+      pcl::console::print_value ("%g", tt.toc ());
+      pcl::console::print_info (" ms : ");
+      pcl::console::print_value ("%d", cloud->points.size ());
+      pcl::console::print_info (" points]\n");
+  }
 
   cloud->width = (int) cloud->points.size ();
   cloud->height = 1;
@@ -159,7 +198,6 @@ int main(int argc, char **argv){
       viewer->addPointCloud(cloud,"POINTCLOUD");
   }
   
-  // viewer->addPointCloud(cloud,"POINTCLOUD");
   viewer->initCameraParameters();
   viewer->resetCamera();
 
