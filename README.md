@@ -3,12 +3,15 @@ Visualizer for a 3D point cloud using PCL Library 1.8.1
 
 ----------------------
 
-This program display a PCL viewer for input data with the next extension:
+This program display a PCL viewer for input point cloud data
 
-* PCD 
-* PLY 
-* TXT 
-* XYZ 
+## Input file structure support
+
+* .pcd 
+* .ply
+* .txt
+* .xyz
+
 
 ## Example
 
