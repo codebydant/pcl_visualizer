@@ -79,8 +79,8 @@ add_executable(${PROJECT_NAME} ${MAIN_SOURCE})
 ##############################################################################
 # TARGET LIBRARIES
 ##############################################################################
-#target_link_libraries(${PROJECT_NAME} ${PCL_LIBRARIES})
-target_link_libraries(${PROJECT_NAME} ${PCL_COMMON_LIBRARIES} ${PCL_IO_LIBRARIES} ${PCL_VISUALIZATION_LIBRARY})
+target_link_libraries(${PROJECT_NAME} ${PCL_LIBRARIES})
+##target_link_libraries(${PROJECT_NAME} ${PCL_COMMON_LIBRARIES} ${PCL_IO_LIBRARIES} ${PCL_VISUALIZATION_LIBRARY})
 
 message("=========================================")
 message("Project: ${PROJECT_NAME} COMPILED WITH CMAKE " ${CMAKE_VERSION})
