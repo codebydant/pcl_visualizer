@@ -14,6 +14,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 
 void printUsage (const char* progName){
   std::cout << "\nUse: " << progName << " <file>"  << std::endl <<
