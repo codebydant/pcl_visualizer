@@ -15,7 +15,7 @@ This program display a PCL viewer for input point cloud data
 
 ## Example
 
-<img src="./example/example.png" align="center" height="500" width="700"><br>
+<img src="./example/example.png" align="center" height="500" width="900"><br>
 
 ## Compilation
 * Set "YOUR OWN" PCL Build DIR in CMakeList.txt e.g: **/opt/pcl-1.9.1/build** and save it.
