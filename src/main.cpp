@@ -14,7 +14,6 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <vector>
 
 void printUsage (const char* progName){
   std::cout << "\nUse: " << progName << " <file>"  << std::endl <<
@@ -180,6 +179,8 @@ int main(int argc, char **argv){
   viewer->setPosition(0,0);
   viewer->setBackgroundColor(0.0, 0.0, 0.0, 0.0); // Setting background to a dark grey
 
+  viewer->setShowFPS(false);
+
   viewer->addCoordinateSystem();
   pcl::PointXYZ p1, p2, p3;
 
@@ -190,6 +191,21 @@ int main(int argc, char **argv){
   viewer->addText3D("x", p1, 0.2, 1, 0, 0, "x_");
   viewer->addText3D("y", p2, 0.2, 0, 1, 0, "y_");
   viewer->addText3D ("z", p3, 0.2, 0, 0, 1, "z_");
+
+  std::string str = "Points: ";
+  std::stringstream ss;
+  ss << cloud->points.size();
+  str += ss.str();
+
+  int xpos = 1.0;
+  int ypos = 1.0;
+  int fontSize = 13;
+
+  double r = 1.0;
+  double g = 1.0;
+  double b = 1.0;
+
+  viewer->addText(str, xpos, ypos, fontSize,r,g,b,"text1");
 
   if(cloud->points[0].r <= 0 and cloud->points[0].g <= 0 and cloud->points[0].b<= 0 ){
       pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZRGB> color_handler(cloud,255,255,0);
