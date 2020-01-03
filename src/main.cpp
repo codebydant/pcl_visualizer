@@ -173,7 +173,8 @@ int main(int argc, char **argv){
   cloud->width = (int) cloud->points.size ();
   cloud->height = 1;
   cloud->is_dense = true;
-
+           
+  vtkObject::GlobalWarningDisplayOff(); // Disable vtk render warning         
   boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer (new pcl::visualization::PCLVisualizer ("PCL VISUALIZER"));
 
   viewer->setPosition(0,0);
