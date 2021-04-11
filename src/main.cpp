@@ -175,7 +175,8 @@ int main(int argc, char **argv){
   cloud->is_dense = true;
            
   vtkObject::GlobalWarningDisplayOff(); // Disable vtk render warning         
-  boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer (new pcl::visualization::PCLVisualizer ("PCL VISUALIZER"));
+  //boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer (new pcl::visualization::PCLVisualizer ("PCL VISUALIZER"));
+  pcl::visualization::PCLVisualizer::Ptr viewer (new pcl::visualization::PCLVisualizer ("PCL VISUALIZER"));
 
   viewer->setPosition(0,0);
   viewer->setBackgroundColor(0.0, 0.0, 0.0, 0.0); // Setting background to a dark grey
