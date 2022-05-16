@@ -33,7 +33,7 @@ int main(int argc, char **argv){
   bool file_is_xyz = false;
 
 
-  if(argc < 2 or argc > 2){
+  if(argc < 2 || argc > 2){
       printUsage (argv[0]);
       return -1;
   }
@@ -82,15 +82,15 @@ int main(int argc, char **argv){
       pcl::console::print_info (" points]\n");
     }else if(file_is_ply){
       pcl::io::loadPLYFile(argv[filenames[0]],*cloud);
-      if(cloud->points.size()<=0 or cloud->points.at(0).x <=0 and cloud->points.at(0).y <=0 and cloud->points.at(0).z <=0){
+      if(cloud->points.size()<=0 || (cloud->points.at(0).x <=0 && cloud->points.at(0).y <=0 && cloud->points.at(0).z <=0)){
           pcl::console::print_warn("\nloadPLYFile could not read the cloud, attempting to loadPolygonFile...\n");
           pcl::io::loadPolygonFile(argv[filenames[0]], cl);
           pcl::fromPCLPointCloud2(cl.cloud, *cloud);
-          if(cloud->points.size()<=0 or cloud->points.at(0).x <=0 and cloud->points.at(0).y <=0 and cloud->points.at(0).z <=0){
+          if(cloud->points.size()<=0 || (cloud->points.at(0).x <=0 && cloud->points.at(0).y <=0 && cloud->points.at(0).z <=0)){
               pcl::console::print_warn("\nloadPolygonFile could not read the cloud, attempting to PLYReader...\n");
               pcl::PLYReader plyRead;
               plyRead.read(argv[filenames[0]],*cloud);
-              if(cloud->points.size()<=0 or cloud->points.at(0).x <=0 and cloud->points.at(0).y <=0 and cloud->points.at(0).z <=0){
+              if(cloud->points.size()<=0 || (cloud->points.at(0).x <=0 && cloud->points.at(0).y <=0 && cloud->points.at(0).z <=0)){
                   pcl::console::print_error("\nError. ply file is not compatible.\n");
                   return -1;
               }
@@ -209,7 +209,7 @@ int main(int argc, char **argv){
 
   viewer->addText(str, xpos, ypos, fontSize,r,g,b,"text1");
 
-  if(cloud->points[0].r <= 0 and cloud->points[0].g <= 0 and cloud->points[0].b<= 0 ){
+  if(cloud->points[0].r <= 0 && cloud->points[0].g <= 0 && cloud->points[0].b<= 0){
       pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZRGB> color_handler(cloud,255,255,0);
       viewer->removeAllPointClouds(0);
       viewer->addPointCloud(cloud,color_handler,"POINTCLOUD");
