@@ -24,9 +24,9 @@ set(PCL_DIR /opt/pcl-1.9.1/build)
 # Include dependencies of pcl 1.8.1 in project directorie
 set(CMAKE_MODULE_PATH ${PCL_DIR}/../cmake/Modules)
 
-# set cmake for use std c++11 and output executable folder to bin
+# set cmake for use std c++17 and output executable folder to bin
 set (CMAKE_CXX_STANDARD 17)
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
+# set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 
 if(NOT WIN32)
   string(ASCII 27 Esc)
@@ -115,7 +115,7 @@ add_executable(${PROJECT_NAME} ${MAIN_SOURCE})
 ##############################################################################
 target_link_libraries(${PROJECT_NAME} ${PCL_LIBRARIES} cloud_parser)
 ##target_link_libraries(${PROJECT_NAME} ${PCL_COMMON_LIBRARIES} ${PCL_IO_LIBRARIES} ${PCL_VISUALIZATION_LIBRARY})
-
+# target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 message("=========================================")
 message("Project: ${PROJECT_NAME} COMPILED WITH CMAKE " ${CMAKE_VERSION})
 message("=========================================")
