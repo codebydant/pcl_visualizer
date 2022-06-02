@@ -6,16 +6,13 @@ void ParserFactory::register_format(std::string format, InterfaceParser* ptr) {
   ParserFactory::factories[format] = ptr;
 }
 
-void ParserFactory::initializes_factories() {
-  ParserFactory::register_format("PCD", new ParserPCD());
-  ParserFactory::register_format("PLY", new ParserPLY());
-}
-
 InterfaceParser* ParserFactory::get_parser(const std::string format) {
   try {
     InterfaceParser* factory_pos = factories.at(format);
     return factory_pos;
   } catch (const std::out_of_range& e) {
+    pcl::console::print_error("An exception occurred: Format %s is not supported\n", format.c_str());
+    std::exit(-1);
   }
   return nullptr;
 }
