@@ -39,3 +39,8 @@ build/
 
 # vscode
 .vscode/
+
+# dev
+.clang-format
+clang-format-all.sh
+display_pcl.sh
