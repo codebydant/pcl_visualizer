@@ -5,7 +5,11 @@
 
 #include <modern/parser.hpp>
 
-void printUsage(const char *progName) { std::cout << "\nUse: " << progName << " <file>" << std::endl << "support: .pcd .ply .txt .xyz" << std::endl << "[q] to exit" << std::endl; }
+void printUsage(const char *progName) {
+  std::cout << "\nUse: " << progName << " <file>" << std::endl
+            << "support: .pcd .ply .txt .xyz" << std::endl
+            << "[q] to exit" << std::endl;
+}
 
 int main(int argc, char **argv) {
   if (argc < 2) {
@@ -22,7 +26,8 @@ int main(int argc, char **argv) {
   cloud->is_dense = true;
   // Disable vtk render warning
   vtkObject::GlobalWarningDisplayOff();
-  // boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer (new pcl::visualization::PCLVisualizer ("PCL VISUALIZER"));
+  // boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer (new
+  // pcl::visualization::PCLVisualizer ("PCL VISUALIZER"));
   pcl::visualization::PCLVisualizer::Ptr viewer(new pcl::visualization::PCLVisualizer("PCL VISUALIZER"));
 
   viewer->setPosition(0, 0);
