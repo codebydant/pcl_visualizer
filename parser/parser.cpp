@@ -14,7 +14,6 @@ InterfaceParser* ParserFactory::get_parser(const std::string format) {
     pcl::console::print_error("An exception occurred: Format %s is not supported\n", format.c_str());
     std::exit(-1);
   }
-  return nullptr;
 }
 
 }  // namespace CloudParserLibrary
