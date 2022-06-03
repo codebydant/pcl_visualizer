@@ -142,6 +142,9 @@ docker pull danieltobon43/pcl-visualizer:1.0-alpine3.15
 
 ## Run docker image
 1. Create a `visualizer.sh` file with executable permissions.
+   
+![Screenshot from 2022-06-03 10-16-13](https://user-images.githubusercontent.com/35694200/171882906-75831bea-64f5-4cd6-9220-2d7a0ef46616.png)
+
 2. Copy the next content into the `visualizer.sh` file (remember to update PATH/TO/YOUR/PCD/PLY/FOLDER accordingly):
 ```
 # Allow X server connection
@@ -155,7 +158,32 @@ docker run -it --rm \
 # Disallow X server connection
 xhost -local:root
 ```
+
+e.g. 
+
+I have a folder called `files` at `/home/user/Downloads/files` with .pcd files. Then, replacing the line:
+
+`--volume=/home/user/Downloads/files:/tmp` and saving the changes will have:
+
+```
+# Allow X server connection
+xhost +local:root
+docker run -it --rm \
+    --env="DISPLAY" \
+    --env="QT_X11_NO_MITSHM=1" \
+    --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
+    --volume=/home/user/Downloads/files:/tmp \
+    danieltobon43/pcl-visualizer:1.0-alpine3.15 /tmp/$1
+# Disallow X server connection
+xhost -local:root
+```
+
 3. Run the command:
 ```
-./visualizer.sh tmp/YOUR-PCD-PLY-FILENAME
+./visualizer.sh YOUR-PCD-PLY-FILENAME
+```
+
+e.g. 
+```
+/visualizer.sh Tree1.pcd 
 ```
