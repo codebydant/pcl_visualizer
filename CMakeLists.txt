@@ -20,7 +20,6 @@ message("${BoldCyan}=========================================")
 # set cmake for use std c++17
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
-# set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 
 ##############################################################################
 # PACKAGES DEPENDENCIES
@@ -80,3 +79,11 @@ target_compile_options(${PROJECT_NAME} PRIVATE -Wno-cpp -Wall -Wextra)
 message("${BoldCyan}=========================================")
 message("${BoldCyan}Project: ${PROJECT_NAME} COMPILED WITH CMAKE " ${CMAKE_VERSION})
 message("${BoldCyan}=========================================")
+
+##############################################################################
+# INSTALL DIRECTORY
+##############################################################################
+install(TARGETS ${PROJECT_NAME}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
