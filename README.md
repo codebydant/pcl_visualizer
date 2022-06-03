@@ -90,4 +90,72 @@ Expected output
 ![Screenshot from 2022-06-03 08-39-30](https://user-images.githubusercontent.com/35694200/171865601-c64efd17-a088-4f3f-afda-c62d20d04f93.png)
 
 ## Docker
-There is an docker image in process for this project...
+This [image](https://hub.docker.com/r/danieltobon43/pcl-visualizer) is based on Linux Alpine 3.15 and has the following packages installed:
+
+- VTK-9.1.0
+- PCL-1.12.0
+- Eigen-3.7.7
+- Flann-1.9.1
+- Boost-1.77.0
+
+It's a lightweight [1.27GB] PCL docker image with the visualization module pre-compiled that uses the pcl-visualizer project to display a cloud
+
+**PCL modules:**
+```
+The following subsystems will be built:
+--   common
+--   kdtree
+--   octree
+--   search
+--   geometry
+--   io
+--   visualization
+-- The following subsystems will not be built:
+--   sample_consensus: Disabled manually.
+--   filters: Disabled manually.
+--   2d: Disabled manually.
+--   features: Disabled manually.
+--   ml: Disabled manually.
+--   segmentation: Disabled manually.
+--   surface: Disabled manually.
+--   registration: Disabled manually.
+--   keypoints: Disabled manually.
+--   tracking: Disabled manually.
+--   recognition: Disabled manually.
+--   stereo: Disabled manually.
+--   apps: Disabled by default
+--   benchmarks: Disabled by default
+--   outofcore: Disabled manually.
+--   examples: Code examples are disabled by default.
+--   people: Disabled manually.
+--   simulation: Disabled by default.
+--   global_tests: Disabled by default
+--   tools: Disabled manually.
+-- Configuring done
+-- Generating done
+```
+
+## Download image from Docker hub
+```
+docker pull danieltobon43/pcl-visualizer:1.0-alpine3.15
+```
+
+## Run docker image
+1. Create a `visualizer.sh` file with executable permissions.
+2. Copy the next content into the `visualizer.sh` file (remember to update PATH/TO/YOUR/PCD/PLY/FOLDER accordingly):
+```
+# Allow X server connection
+xhost +local:root
+docker run -it --rm \
+    --env="DISPLAY" \
+    --env="QT_X11_NO_MITSHM=1" \
+    --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
+    --volume=PATH/TO/YOUR/PCD/PLY/FOLDER:/tmp \
+    danieltobon43/pcl-visualizer:1.0-alpine3.15 /tmp/$1
+# Disallow X server connection
+xhost -local:root
+```
+3. Run the command:
+```
+./visualizer.sh tmp/YOUR-PCD-PLY-FILENAME
+```
