@@ -36,6 +36,7 @@ build/
 
 # Docker
 .devcontainer/
+docker/
 
 # vscode
 .vscode/
