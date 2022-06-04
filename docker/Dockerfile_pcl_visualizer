@@ -1,0 +1,8 @@
+FROM pcl_visualization:1.0 AS runtime
+
+# The project binary is already compiled
+# If that is not the case, you must add compilation
+# task to dockerfile or compile the project
+COPY pcl-visualizer /usr/bin
+COPY parser /usr/lib
+ENTRYPOINT ["pcl-visualizer"]

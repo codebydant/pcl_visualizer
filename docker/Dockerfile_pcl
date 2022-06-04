@@ -1,0 +1,96 @@
+# ============================
+# Stage: base image
+# ============================
+# syntax=docker/dockerfile:1
+ARG PCL_VERSION="1.12.1"
+FROM alpine:3.15 AS pcl-dependencies
+RUN apk add --no-cache boost-dev vtk vtk-dev eigen-dev mesa-dev mesa-dri-swrast mesa-gl \
+    flann-dev --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing
+
+# ============================
+# Stage: build pcl
+# ============================
+FROM pcl-dependencies AS build-pcl
+
+RUN apk add --no-cache wget cmake make g++
+
+# Download point cloud library source code once
+ARG PCL_VERSION
+RUN cd /tmp && wget https://github.com/PointCloudLibrary/pcl/archive/pcl-${PCL_VERSION}.tar.gz \
+    && tar -xf pcl-${PCL_VERSION}.tar.gz
+
+# PCL build modules (be aware that some modules depend from another ones)
+ENV BUILD_MODULES -DBUILD_2d=OFF \
+    -DBUILD_CUDA=OFF \
+    -DBUILD_GPU=OFF \
+    -DBUILD_apps=OFF \
+    -DBUILD_benchmarks=OFF \
+    -DBUILD_common=ON \
+    -DBUILD_examples=OFF \
+    -DBUILD_features=OFF \
+    -DBUILD_filters=OFF \
+    -DBUILD_geometry=ON \
+    -DBUILD_global_tests=OFF \
+    -DBUILD_io=ON \
+    -DBUILD_kdtree=ON \
+    -DBUILD_keypoints=OFF \
+    -DBUILD_ml=OFF \
+    -DBUILD_octree=ON \
+    -DBUILD_outofcore=OFF \
+    -DBUILD_people=OFF \
+    -DBUILD_recognition=OFF \
+    -DBUILD_registration=OFF \
+    -DBUILD_sample_consensus=OFF \
+    -DBUILD_search=ON \
+    -DBUILD_segmentation=OFF \
+    -DBUILD_simulation=OFF \
+    -DBUILD_stereo=OFF \
+    -DBUILD_surface=OFF \
+    -DBUILD_tools=OFF \
+    -DBUILD_tracking=OFF \
+    -DBUILD_visualization=ON
+
+# Install pcl at /tmp/pcl-pcl-${PCL_VERSION}/install
+ENV CMAKE_CONFIG -DCMAKE_INSTALL_PREFIX:PATH=/tmp/pcl-pcl-${PCL_VERSION}/install \
+    -DCMAKE_BUILD_TYPE=Release
+
+# Set flags support
+ENV WITH_CONFIG -DWITH_CUDA=OFF \
+    -DWITH_DAVIDSDK=OFF \
+    -DWITH_DOCS=OFF \
+    -DWITH_DSSDK=OFF \
+    -DWITH_ENSENSO=OFF \
+    -DWITH_LIBUSB=OFF \
+    -DWITH_OPENGL=ON \
+    -DWITH_OPENMP=ON \
+    -DWITH_OPENNI=OFF \
+    -DWITH_OPENNI2=OFF \
+    -DWITH_PCAP=OFF \
+    -DWITH_PNG=OFF \
+    -DWITH_QHULL=OFF \
+    -DWITH_QT=OFF \
+    -DWITH_RSSDK=OFF \
+    -DWITH_RSSDK2=OFF \
+    -DWITH_VTK=ON
+
+# Set vtk backend rendering
+ARG VTK_CONFIG -DVTK_RENDERING_BACKEND=OpenGL2
+
+# Compile pcl
+RUN cd /tmp/pcl-pcl-${PCL_VERSION} \
+    && mkdir build install && cd build \
+    && cmake ${BUILD_MODULES} ${CMAKE_CONFIG} ${WITH_CONFIG} ${VTK_CONFIG}../ \
+    && make -j$(nproc) \
+    && make install
+
+# Unset ENV variables
+ENV BUILD_MODULES=
+ENV CMAKE_CONFIG=
+ENV WITH_CONFIG=
+
+# ============================
+# Stage: runtime
+# ============================
+FROM pcl-dependencies as runtime
+ARG PCL_VERSION
+COPY --from=build-pcl /tmp/pcl-pcl-${PCL_VERSION}/install /usr
