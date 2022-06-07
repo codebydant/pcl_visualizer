@@ -21,12 +21,9 @@ namespace CloudParserLibrary {
 
 class ParserFactory {
  public:
-  ParserFactory() {
-    ParserFactory::register_format("PCD", new ParserPCD());
-    ParserFactory::register_format("PLY", new ParserPLY());
-  }
   void register_format(std::string format, InterfaceParser *ptr);
   InterfaceParser *get_parser(const std::string format);
+  size_t get_size();
 
  private:
   std::map<std::string, InterfaceParser *> factories = {};
@@ -35,6 +32,10 @@ class ParserFactory {
 class ParserCloudFile {
  public:
   ParserFactory parser_factory;
+  ParserCloudFile(){
+    parser_factory.register_format("PCD", new ParserPCD());
+    parser_factory.register_format("PLY", new ParserPLY());
+  }  
   void load_cloudfile(std::string filename, pcl::PointCloud<pcl::PointXYZRGB>::Ptr &cloud) {
     int position = filename.find_last_of(".");
     std::string extension = filename.substr(position + 1);
