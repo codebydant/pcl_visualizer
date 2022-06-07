@@ -152,6 +152,7 @@ xhost +local:root
 docker run -it --rm \
     --env="DISPLAY" \
     --env="QT_X11_NO_MITSHM=1" \
+    --name="pcl-container" \
     --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
     --volume=PATH/TO/YOUR/PCD/PLY/FOLDER:/tmp \
     danieltobon43/pcl-visualizer:1.0-alpine3.15 /tmp/$1
@@ -171,12 +172,20 @@ xhost +local:root
 docker run -it --rm \
     --env="DISPLAY" \
     --env="QT_X11_NO_MITSHM=1" \
+    --name="pcl-container" \
     --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
     --volume=/home/user/Downloads/files:/tmp \
     danieltobon43/pcl-visualizer:1.0-alpine3.15 /tmp/$1
 # Disallow X server connection
 xhost -local:root
 ```
+This command will run a docker container called: `"pcl-container"` with the `danieltobon43/pcl-visualizer:1.0-alpine3.15` image. 
+
+The environment variables `QT_X11_NO_MITSHM`, `DISPLAY` will activate a tunel for displaying a GUI in docker (More info [here](https://www.mit.edu/~arosinol/2019/08/06/Docker_Display_GUI_with_X_server/)).
+
+The `--volume=/home/user/Downloads/files:/tmp` line will mount the `files` folder from the host machine (my PC) into the location especified in the docker container, e.g `/tmp` folder in this case. This will allow to the project `pcl-visualizer` have access to the `.pcd`/`.ply` files inside the container.
+
+Finally, the last line is the call to the `danieltobon43/pcl-visualizer:1.0-alpine3.15 /tmp/$1` image with a command line parameter given by the `/tmp/$1` file-path.
 
 3. Run the command:
 ```
@@ -185,5 +194,5 @@ xhost -local:root
 
 e.g. 
 ```
-/visualizer.sh Tree1.pcd 
+./visualizer.sh Tree1.pcd 
 ```
