@@ -1,0 +1,91 @@
+# ============================
+# Stage: base image
+# ============================
+ARG USERNAME=pcluser
+FROM pcl-docker:1.12.1-alpine3.15 AS base
+ARG USERNAME
+RUN apk add --no-cache zsh wget git sudo
+ENV DEBIAN_FRONTEND=noninteractive
+# https://wiki.alpinelinux.org/wiki/Setting_up_a_new_user
+# creates a pcluser with no password
+RUN adduser --gecos "pcluser" \
+    --disabled-password \
+    --shell /bin/zsh \
+    --uid 1000 \
+    ${USERNAME} && \
+    echo "$USERNAME:1234" | chpasswd && \
+    echo "$USERNAME ALL=(ALL) ALL" > /etc/sudoers.d/$USERNAME && chmod 0440 /etc/sudoers.d/$USERNAME
+
+# creates a group: docker with gid:1001
+RUN addgroup --gid 1001 docker
+
+# add user:pcluser to docker,pcluser group
+RUN addgroup ${USERNAME} docker
+# RUN addgroup ${USERNAME} ${USERNAME}
+
+# expected result with: "id pcluser"
+# uid=1000(pcluser) gid=1000(pcluser) groups=1000(pcluser),1001(docker)
+
+# useful commands
+# id
+# id USER
+# groups
+
+# Optional
+# Since I’m not familiar with Alpine Linux I had to investigate a little. 
+# To have usermod and groupmod, I have to install the shadow package.
+# https://cinhtau.net/2017/04/19/usermod-and-groupmod-alpine/
+
+# change uid and gid for elasticsearch user
+# RUN apk --no-cache add shadow && \
+#     usermod -u 2500 elasticsearch && \
+#     groupmod -g 2500 elasticsearch
+
+# RUN useradd -m $USERNAME && \
+#         echo "$USERNAME:1234" | chpasswd && \
+#         usermod --shell /bin/zsh $USERNAME && \
+#         usermod -aG sudo $USERNAME && \
+#         echo "$USERNAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/$USERNAME && \
+#         chmod 0440 /etc/sudoers.d/$USERNAME && \
+#         usermod  --uid 1000 $USERNAME && \
+#         groupmod --gid 1000 $USERNAME
+# USER $USERNAME
+
+
+LABEL version="1.0" maintainer="Daniel Tobon <daniel.tobon@uao.edu.co>" \
+    description="Point Cloud Library v1.12.1 - Alpine Linux 3.15"
+USER $USERNAME
+RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true && \
+    wget https://gist.githubusercontent.com/danielTobon43/9fdbaa726a2d239b735a18c8e67d706e/raw/496deee02afc530f3b49537da04df3dbab39828d/robbyrussell.zsh-theme \
+    -O /home/$USERNAME/.oh-my-zsh/themes/robbyrussell.zsh-theme && \
+    echo "unset zle_bracketed_paste" >> /home/$USERNAME/.zshrc && unset DEBIAN_FRONTEND
+WORKDIR /home/$USERNAME
+EXPOSE 2225
+CMD [ "zsh" ]
+
+# ============================
+# Stage: development tools
+# ============================
+FROM base AS dev
+USER root
+RUN apk add --no-cache cmake build-base g++ gcc vim nano clang
+ARG USERNAME
+USER $USERNAME
+
+# ============================
+# Stage: debugger tools
+# ============================
+FROM base AS debug
+USER root
+RUN apk add --no-cache gdb rsync openssh-server
+ARG USERNAME
+USER $USERNAME
+
+# ============================
+# Stage: debugger+dev tools
+# ============================
+FROM dev AS dev-debug
+USER root
+RUN apk add --no-cache gdb rsync openssh-server
+ARG USERNAME
+USER $USERNAME
