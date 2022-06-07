@@ -87,3 +87,8 @@ install(TARGETS ${PROJECT_NAME}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
+
+if(BUILD_TESTING)
+    add_subdirectory(external)
+    add_subdirectory(tests)
+endif()
