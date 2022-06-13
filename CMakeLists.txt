@@ -9,7 +9,7 @@ DESCRIPTION "Point cloud visualizser with PCL"
 )
 
 # set build type = Release mode
-set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_BUILD_TYPE Debug)
 
 include("${CMAKE_CURRENT_LIST_DIR}/cmake/color.cmake")
 
@@ -20,7 +20,8 @@ message("${BoldCyan}=========================================")
 # set cmake for use std c++17
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
-
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fprofile-arcs -ftest-coverage")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
 ##############################################################################
 # PACKAGES DEPENDENCIES
 ##############################################################################
@@ -88,7 +89,18 @@ install(TARGETS ${PROJECT_NAME}
     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
+option(BUILD_TESTING "Builds only the test executable." OFF)
+option(CODE_COVERAGE "Collect coverage from test library" OFF)
+
 if(BUILD_TESTING)
+    message("${BoldWhite} Testing enabled ${ColourReset}")
+    enable_testing()
     add_subdirectory(external)
     add_subdirectory(tests)
+    if(CODE_COVERAGE)
+        message("${BoldWhite} Coverage enabled ${ColourReset}")        
+        include("${CMAKE_CURRENT_LIST_DIR}/cmake/CodeCoverage.cmake")
+        append_coverage_compiler_flags()
+        setup_target_for_coverage_lcov(NAME coverage EXECUTABLE testlib BASE_DIRECTORY ../coverage)
+    endif()
 endif()
