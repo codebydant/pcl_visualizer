@@ -9,7 +9,7 @@ on:
       - documentation
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-20.04
 
     steps:
@@ -23,7 +23,7 @@ jobs:
           build_coverage: true
 
       - name: Install LCOV
-        run: apt-get update && apt-get -y install lcov
+        run: sudo apt-get update && sudo apt-get -y install lcov
 
       - name: LCOV Minimum coverage checker
         uses: terencetcf/github-actions-lcov-minimum-coverage-checker@v1
