@@ -42,5 +42,4 @@ docker/
 .vscode/
 
 # dev
-clang-format-all.sh
 display_pcl.sh
