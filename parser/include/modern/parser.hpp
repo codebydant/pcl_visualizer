@@ -32,10 +32,10 @@ class ParserFactory {
 class ParserCloudFile {
  public:
   ParserFactory parser_factory;
-  ParserCloudFile(){
+  ParserCloudFile() {
     parser_factory.register_format("PCD", new ParserPCD());
     parser_factory.register_format("PLY", new ParserPLY());
-  }  
+  }
   void load_cloudfile(std::string filename, pcl::PointCloud<pcl::PointXYZRGB>::Ptr &cloud) {
     int position = filename.find_last_of(".");
     std::string extension = filename.substr(position + 1);

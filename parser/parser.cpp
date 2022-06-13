@@ -6,9 +6,7 @@ void ParserFactory::register_format(std::string format, InterfaceParser* ptr) {
   ParserFactory::factories[format] = ptr;
 }
 
-size_t ParserFactory::get_size() {
-  return factories.size();
-}
+size_t ParserFactory::get_size() { return factories.size(); }
 
 InterfaceParser* ParserFactory::get_parser(const std::string format) {
   try {
