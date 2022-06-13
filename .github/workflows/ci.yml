@@ -9,12 +9,23 @@ on:
       - documentation
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-20.04
 
     steps:
-      - name: Clone repository
+      - name: Clone Repository
         uses: actions/checkout@v3
 
-      - name: PCL Build Action
-        uses: danielTobon43/PCL-Build-Action@v1
+      - name: Build, Test and Coverage
+        uses: danielTobon43/PCL-Build-Action@testing
+        with:
+          build_tests: true
+          build_coverage: true
+
+      - name: Install LCOV
+        run: apt-get update && apt-get -y install lcov
+
+      - name: LCOV Minimum coverage checker
+        uses: terencetcf/github-actions-lcov-minimum-coverage-checker@v1
+        with:
+          coverage-file: coverag
