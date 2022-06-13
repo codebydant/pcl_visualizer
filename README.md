@@ -1,4 +1,6 @@
 # pcl_visualizer
+![example workflow](https://github.com/danielTobon43/pcl_visualizer/actions/workflows/ci.yml/badge.svg?branch=master)
+
 Visualizer for a 3D point cloud using PCL Library 1.8...1.12.1
 
 ----------------------
@@ -58,6 +60,9 @@ This program display a PCL viewer for input point cloud data
 ```
 
 ## Compilation
+You can either compile the source code with CMake or download a pre-compiled docker image.
+
+### Compile from source code
 This program depends on PCL, VTK and OpenGL.
 
 1. In the root folder create a build directoy
@@ -68,7 +73,7 @@ mkdir build
 2. Create compilation files
    
 ```
-cd build && cmake ../src
+cd build/ && cmake ../src/
 ```
 3. Compile project
    
@@ -89,7 +94,7 @@ Expected output
 
 ![Screenshot from 2022-06-03 08-39-30](https://user-images.githubusercontent.com/35694200/171865601-c64efd17-a088-4f3f-afda-c62d20d04f93.png)
 
-## Docker
+### Download docker image
 This [image](https://hub.docker.com/r/danieltobon43/pcl-visualizer) is based on Linux Alpine 3.15 and has the following packages installed:
 
 - VTK-9.1.0
@@ -135,17 +140,16 @@ The following subsystems will be built:
 -- Generating done
 ```
 
-## Download image from Docker hub
+1. Download image from Docker hub
 ```
 docker pull danieltobon43/pcl-visualizer:1.0-alpine3.15
 ```
 
-## Run docker image
-1. Create a `visualizer.sh` file with executable permissions.
+2. Create a `visualizer.sh` file with executable permissions.
    
 ![Screenshot from 2022-06-03 10-16-13](https://user-images.githubusercontent.com/35694200/171882906-75831bea-64f5-4cd6-9220-2d7a0ef46616.png)
 
-2. Copy the next content into the `visualizer.sh` file (remember to update PATH/TO/YOUR/PCD/PLY/FOLDER accordingly):
+3. Copy the next content into the `visualizer.sh` file (remember to update PATH/TO/YOUR/PCD/PLY/FOLDER accordingly):
 ```
 # Allow X server connection
 xhost +local:root
@@ -187,7 +191,7 @@ The `--volume=/home/user/Downloads/files:/tmp` line will mount the `files` folde
 
 Finally, the last line is the call to the `danieltobon43/pcl-visualizer:1.0-alpine3.15 /tmp/$1` image with a command line parameter given by the `/tmp/$1` file-path.
 
-3. Run the command:
+4. Run a docker container with the following command:
 ```
 ./visualizer.sh YOUR-PCD-PLY-FILENAME
 ```
@@ -196,3 +200,6 @@ e.g.
 ```
 ./visualizer.sh Tree1.pcd 
 ```
+
+## Contributions
+This project is open to any contribution, either a new format parser PR, CI workflow improvement, documentation, etc.
