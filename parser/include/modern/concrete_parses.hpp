@@ -96,5 +96,37 @@ class ParserTXT : public InterfaceParser {
     std::exit(-1);
   }
 };
+
+class ParserXYZ : public InterfaceParser {
+ public:
+  std::string parser_name = "ParserXYZ";
+  void load_cloudfile(std::string filename, pcl::PointCloud<pcl::PointXYZRGB>::Ptr& cloud) {
+    std::ifstream file(filename, std::ifstream::in);
+    if (!file.is_open()) {
+      pcl::console::print_error("\nError: Could not find %s\n", filename);
+      std::exit(-1);
+    }
+
+    double x_, y_, z_;
+
+    while (file >> x_ >> y_ >> z_) {
+      pcl::PointXYZRGB pt;
+      pt.x = x_;
+      pt.y = y_;
+      pt.z = z_;
+
+      cloud->points.push_back(pt);
+    }
+
+    file.close();
+    if (cloud_is_good(cloud)) {
+      return;
+    }
+
+    pcl::console::print_error("\nError empty cloud.\n");
+    std::exit(-1);
+  }
+};
+
 }  // namespace CloudParserLibrary
 #endif

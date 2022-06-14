@@ -36,6 +36,7 @@ class ParserCloudFile {
     parser_factory.register_format("PCD", new ParserPCD());
     parser_factory.register_format("PLY", new ParserPLY());
     parser_factory.register_format("TXT", new ParserTXT());
+    parser_factory.register_format("XYZ", new ParserXYZ());
   }
   void load_cloudfile(std::string filename, pcl::PointCloud<pcl::PointXYZRGB>::Ptr &cloud) {
     int position = filename.find_last_of(".");
