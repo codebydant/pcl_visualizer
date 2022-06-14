@@ -26,6 +26,13 @@ namespace CloudParserLibrary {
 
 class InterfaceParser {
  public:
+  bool cloud_is_good(pcl::PointCloud<pcl::PointXYZRGB>::Ptr& cloud) {
+    if ((cloud->points.size() > 0) or
+        (cloud->points[0].x > 0 && cloud->points[0].y > 0 && cloud->points[0].z > 0)) {
+      return true;
+    }
+    return false;
+  }
   virtual void load_cloudfile(std::string filename, pcl::PointCloud<pcl::PointXYZRGB>::Ptr& cloud) = 0;
 };
 

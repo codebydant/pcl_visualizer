@@ -65,7 +65,7 @@ int main(int argc, char **argv) {
   viewer->addText(str, xpos, ypos, fontSize, r, g, b, "text1");
 
   // set cloud color if not defined
-  if (cloud->points[0].r <= 0 and cloud->points[0].g <= 0 and cloud->points[0].b <= 0) {
+  if (cloud->points[0].r <= 0 && cloud->points[0].g <= 0 && cloud->points[0].b <= 0) {
     pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZRGB> color_handler(cloud, 255, 255, 0);
     viewer->removeAllPointClouds(0);
     viewer->addPointCloud(cloud, color_handler, "POINTCLOUD");

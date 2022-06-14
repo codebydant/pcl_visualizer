@@ -12,6 +12,8 @@
 #include <pcl/io/ply_io.h>
 #include <pcl/io/vtk_lib_io.h>
 
+#include <fstream>
+
 #include "inteface_parser.hpp"
 
 namespace CloudParserLibrary {
@@ -29,13 +31,6 @@ class ParserPCD : public InterfaceParser {
 class ParserPLY : public InterfaceParser {
  public:
   std::string parser_name = "ParserPLY";
-  bool cloud_is_good(pcl::PointCloud<pcl::PointXYZRGB>::Ptr& cloud) {
-    if ((cloud->points.size() > 0) or
-        (cloud->points[0].x > 0 && cloud->points[0].y > 0 && cloud->points[0].z > 0)) {
-      return true;
-    }
-    return false;
-  }
   void load_cloudfile(std::string filename, pcl::PointCloud<pcl::PointXYZRGB>::Ptr& cloud) {
     pcl::io::loadPLYFile(filename, *cloud);
     if (cloud_is_good(cloud)) {
@@ -59,6 +54,45 @@ class ParserPLY : public InterfaceParser {
     }
 
     pcl::console::print_error("\nError .ply file is not compatible.\n");
+    std::exit(-1);
+  }
+};
+
+class ParserTXT : public InterfaceParser {
+ public:
+  std::string parser_name = "ParserTXT";
+  void load_cloudfile(std::string filename, pcl::PointCloud<pcl::PointXYZRGB>::Ptr& cloud) {
+    std::ifstream file(filename, std::ifstream::in);
+    if (!file.is_open()) {
+      pcl::console::print_error("\nError: Could not find %s\n", filename);
+      std::exit(-1);
+    }
+
+    double x_, y_, z_, r, g, b;
+
+    while (file >> x_ >> y_ >> z_ >> r >> g >> b) {
+      pcl::PointXYZRGB pt;
+      pt.x = x_;
+      pt.y = y_;
+      pt.z = z_;
+
+      uint8_t r_, g_, b_;
+      r_ = uint8_t(r);
+      g_ = uint8_t(g);
+      b_ = uint8_t(b);
+
+      uint32_t rgb_ = ((uint32_t)r_ << 16 | (uint32_t)g_ << 8 | (uint32_t)b_);
+      pt.rgb = *reinterpret_cast<float*>(&rgb_);
+
+      cloud->points.push_back(pt);
+    }
+
+    file.close();
+    if (cloud_is_good(cloud)) {
+      return;
+    }
+
+    pcl::console::print_error("\nError empty cloud.\n");
     std::exit(-1);
   }
 };
