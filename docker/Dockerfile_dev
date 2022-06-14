@@ -2,7 +2,7 @@
 # Stage: base image
 # ============================
 ARG USERNAME=pcluser
-FROM pcl-docker:1.12.1-alpine3.15 AS base
+FROM danieltobon43/pcl-docker:1.12.1-alpine3.15 AS base
 ARG USERNAME
 RUN apk add --no-cache zsh wget git sudo
 ENV DEBIAN_FRONTEND=noninteractive
@@ -61,14 +61,14 @@ RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -
     echo "unset zle_bracketed_paste" >> /home/$USERNAME/.zshrc && unset DEBIAN_FRONTEND
 WORKDIR /home/$USERNAME
 EXPOSE 2225
-CMD [ "zsh" ]
+
 
 # ============================
 # Stage: development tools
 # ============================
 FROM base AS dev
 USER root
-RUN apk add --no-cache cmake build-base g++ gcc vim nano clang
+RUN apk add --no-cache cmake build-base g++ gcc vim nano clang lcov --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing
 ARG USERNAME
 USER $USERNAME
 
@@ -89,3 +89,4 @@ USER root
 RUN apk add --no-cache gdb rsync openssh-server
 ARG USERNAME
 USER $USERNAME
+CMD [ "zsh" ]
