@@ -22,10 +22,7 @@ jobs:
           build_tests: true
           build_coverage: true
 
-      - name: Install LCOV
-        run: sudo apt-get update && sudo apt-get -y install lcov
-
-      - name: LCOV Minimum coverage checker
+      - name: LCOV Minimum Coverage Checker
         uses: terencetcf/github-actions-lcov-minimum-coverage-checker@v1
         with:
           coverage-file: coverage.info
