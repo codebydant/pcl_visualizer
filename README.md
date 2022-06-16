@@ -86,7 +86,7 @@ Expected output
 ![Screenshot from 2022-06-03 08-35-43](https://user-images.githubusercontent.com/35694200/171864937-91aa8a3d-8bff-4f08-a3f8-d084a6243b5c.png)
        
         	 
-## Test
+### Test
 ```
 ./pcl-visualizer <cloud file> 
 ```
