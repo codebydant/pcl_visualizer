@@ -75,21 +75,21 @@ install(TARGETS ${PROJECT_NAME}
 option(BUILD_TESTING "Builds only the test executable." OFF)
 option(CODE_COVERAGE "Collect coverage from test library" OFF)
 
-if(BUILD_TESTING)
-    message("${BoldWhite} Testing enabled ${ColourReset}")
-    enable_testing()
-    add_subdirectory(external)
-    add_subdirectory(tests)
+# if(BUILD_TESTING)
+# message("${BoldWhite} Testing enabled ${ColourReset}")
+# enable_testing()
+# add_subdirectory(external)
 
-    if(CODE_COVERAGE)
-        message("${BoldWhite} Coverage enabled ${ColourReset}")
-        include("${CMAKE_CURRENT_LIST_DIR}/cmake/CodeCoverage.cmake")
-        append_coverage_compiler_flags()
-        setup_target_for_coverage_lcov(NAME coverage EXECUTABLE ctest -j ${n_cores}
-            BASE_DIRECTORY ../coverage
-            DEPENDENCIES
-            testlib
-            testconcreteparses
-        )
-    endif()
-endif()
+# add_subdirectory(tests)
+# if(CODE_COVERAGE)
+# message("${BoldWhite} Coverage enabled ${ColourReset}")
+# include("${CMAKE_CURRENT_LIST_DIR}/cmake/CodeCoverage.cmake")
+# append_coverage_compiler_flags()
+# setup_target_for_coverage_lcov(NAME coverage EXECUTABLE ctest -j ${n_cores}
+# BASE_DIRECTORY ../coverage
+# DEPENDENCIES
+# testlib
+# testconcreteparses
+# )
+# endif()
+# endif()
