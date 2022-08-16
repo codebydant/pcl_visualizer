@@ -1,27 +1,25 @@
 # #############################################################################
 # CMAKE CONFIGURATION
 # #############################################################################
-cmake_minimum_required(VERSION 3.5.1 FATAL_ERROR)
-
-# set project name
-project(pcl-visualizer VERSION 1.0.0
-    DESCRIPTION "Point cloud visualizser with PCL"
-)
-
-# set build type = Release mode
-set(CMAKE_BUILD_TYPE Debug)
+cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
 
 include("${CMAKE_CURRENT_LIST_DIR}/cmake/color.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/cmake/functions.cmake")
+
+# set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE STRING "Final installation location.")
+set(CMAKE_BUILD_TYPE_INIT "Release")
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fprofile-arcs -ftest-coverage")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
+
+project(pcl-visualizer VERSION 1.0.1
+    DESCRIPTION "Point cloud visualizser with PCL"
+)
 
 message("\n" "${BoldCyan}=========================================")
 message("${BoldCyan}Project: ${PROJECT_NAME} ")
 message("${BoldCyan}=========================================")
-
-# set cmake for use std c++17
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fprofile-arcs -ftest-coverage")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
 
 # #############################################################################
 # PACKAGES DEPENDENCIES
@@ -30,7 +28,7 @@ message("${BoldYellow}***********************")
 message("${BoldYellow}PCL PACKAGE")
 message("${BoldYellow}***********************")
 
-find_package(PCL 1.8 REQUIRED QUIET)
+find_package(PCL 1.8 REQUIRED QUIET COMPONENTS visualization)
 
 if(PCL_FOUND)
     message(STATUS "${BoldGreen}PCL status:")
@@ -40,27 +38,10 @@ else()
     message(FATAL_ERROR "${BoldRed}    ERROR: PCL minimum required version 1.8. Not found")
 endif()
 
-message("${BoldYellow}***********************")
-message("${BoldYellow}VTK PACKAGE")
-message("${BoldYellow}***********************")
-
-find_package(VTK 8.1 REQUIRED QUIET)
-
-if(VTK_FOUND)
-    message(STATUS "${BoldGreen}VTK status:")
-    message(STATUS "    version: ${VTK_VERSION}")
-    message(STATUS "    directory: ${VTK_DIR}")
-else()
-    message(FATAL_ERROR "${BoldRed} ERROR: VTK minimum required version 8.1. Not found")
-endif()
-
-# Use the compile definitions defined in PCL
-add_definitions(${PCL_DEFINITIONS})
-
-# #############################################################################
-# ADD LIBRARIES FOLDER
-# #############################################################################
-add_subdirectory(parser)
+fetch_project(
+    NAME cloudparse
+    URL https://github.com/danielTobon43/cloudparse/archive/v0.2.1.tar.gz
+)
 
 # #############################################################################
 # SOURCE CODE
@@ -75,9 +56,8 @@ add_executable(${PROJECT_NAME} ${MAIN_SOURCE})
 # #############################################################################
 # TARGET LIBRARIES
 # #############################################################################
-target_include_directories(${PROJECT_NAME} PRIVATE ${PCL_INCLUDE_DIRS} ${VTK_INCLUDE_DIRS})
-target_include_directories(cloud_parser PRIVATE ${PCL_INCLUDE_DIRS} ${VTK_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} ${PCL_LIBRARIES} ${VTK_LIBRARIES} cloud_parser)
+target_include_directories(${PROJECT_NAME} PRIVATE ${PCL_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} ${PCL_LIBRARIES} cloudparse)
 target_compile_options(${PROJECT_NAME} PRIVATE -Wno-cpp -Wall -Wextra)
 
 message("${BoldCyan}=========================================")
