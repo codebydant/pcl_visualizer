@@ -1,6 +1,6 @@
 #include <pcl/visualization/pcl_visualizer.h>
 
-#include <modern/parser.hpp>
+#include "cloudparse/parser.hpp"
 
 // Help function
 void printUsage(const char *progName) {
