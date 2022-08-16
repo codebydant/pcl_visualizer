@@ -13,7 +13,7 @@ int main(int argc, char **argv) {
   // check if command line has at least 2 arguments
   if (argc < 2) {
     printUsage(argv[0]);
-    std::exit(-1);
+    std::exit(0);
   }
 
   // create cloud object
